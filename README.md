@@ -1,25 +1,25 @@
-# VB6: два способа добавить иконки в стандартное меню
+# VB6: Zwei Methoden zum Hinzufügen von Symbolen zu Standardmenüs
 
-Минимальный проект Visual Basic 6.0. Без OCX, subclassing и owner-draw.
+Ein minimales Visual Basic 6.0-Projekt. Ohne OCX-Steuerelemente, Subclassing oder Owner-Draw.
 
-## Где реализация
+## Umsetzung
 
-Всё в `frmMain.frm`, обработчик `Form_Load`:
+Der gesamte Code befindet sich in `frmMain.frm`, innerhalb der Ereignisprozedur `Form_Load`:
 
-- **Способ 1**: `SetMenuItemBitmaps(hClassic, i, MF_BYPOSITION, ...)` — помещает монохромную картинку в область галочки меню. Это самый простой вызов. Важно: последние параметры — изображение для *unchecked* и *checked*, а не для hover/normal. В примере они одинаковые.
-- **Способ 2**: `SetMenuItemInfo(hModern, i, 1&, itemInfo)` — назначает `MENUITEMINFO.hbmpItem`, с `fMask = MIIM_BITMAP`, не меняя текст пункта. Для наглядности использованы цветные 16×16 BMP (с белым фоном).
+- **Methode 1**: `SetMenuItemBitmaps(hClassic, i, MF_BYPOSITION, ...)` – platziert ein monochromes Bild im Bereich des Häkchens (Checkmark-Bereich) eines Menüeintrags. Dies ist der einfachste Aufruf. Wichtig: Die letzten Parameter beziehen sich auf den Zustand *nicht markiert* (unchecked) bzw. *markiert* (checked) – nicht auf den Zustand bei Mauszeigerkontakt (Hover) oder im Normalzustand. Im Beispiel sind die Bilder für beide Zustände identisch.
+- **Methode 2**: `SetMenuItemInfo(hModern, i, 1&, itemInfo)` – weist `MENUITEMINFO.hbmpItem` ein Bild zu (mit `fMask = MIIM_BITMAP`), ohne den Text des Menüeintrags zu verändern. Zur Veranschaulichung werden hier farbige 16×16-BMP-Dateien (mit weißem Hintergrund) verwendet.
 
-`GetMenu` получает верхнее меню формы; `GetSubMenu(..., 0/1)` — конкретный раскрывающийся список; `i` — позиция его пункта от нуля. Иконки загружаются через `LoadPicture` и остаются в `StdPicture` полях формы, чтобы их дескрипторы оставались живы.
+`GetMenu` ruft das Hauptmenü des Formulars ab; `GetSubMenu(..., 0/1)` greift auf das jeweilige Untermenü (Dropdown-Liste) zu; `i` steht für die nullbasierte Position des Menüeintrags. Die Symbole werden mittels `LoadPicture` geladen und in `StdPicture`-Feldern des Formulars gespeichert, damit ihre Handles (Deskriptoren) gültig bleiben.
 
-## Замечания
+## Hinweise
 
-- Этот пример добавляет картинки к **элементам выпадающего меню**. Он не вставляет иконки в названия двух пунктов на самой верхней полосе меню.
-- `SetMenuItemBitmaps` рассчитан на **монохромные** bitmap; цветные могут выглядеть плохо. Белое в этих bitmap трактуется как прозрачное.
-- В `MIIM_BITMAP` здесь обычные 24-битные BMP с **белым фоном**, а не полноценные PNG с альфа-прозрачностью.
-- Для обоих способов нужна обычная 32-битная VB6-программа; на 64-битной Windows VB6 EXE запускается через WOW64.
-- Проект создан и проверен статически, но **не запускался в Visual Basic 6 IDE** (Windows/VB6 здесь недоступен).
+- Dieses Beispiel fügt Bilder zu **Elementen in Untermenüs (Dropdown-Menüs)** hinzu. Es werden keine Symbole in die Menüeinträge der obersten Menüleiste selbst eingefügt.
+- `SetMenuItemBitmaps` ist für **monochrome** Bitmaps ausgelegt; farbige Bilder können unter Umständen schlecht dargestellt werden. Weiß wird in diesen Bitmaps als transparent interpretiert.
+- Bei der Verwendung von `MIIM_BITMAP` kommen hier herkömmliche 24-Bit-BMP-Dateien mit **weißem Hintergrund** zum Einsatz – keine vollwertigen PNG-Dateien mit Alpha-Transparenz.
+- Für beide Methoden ist ein reguläres 32-Bit-VB6-Programm erforderlich. Unter 64-Bit-Windows wird die VB6-EXE über WOW64 ausgeführt.
+- Das Projekt wurde erstellt und statisch überprüft, jedoch **nicht in der Visual Basic 6-IDE ausgeführt** (Windows/VB6 stehen hier nicht zur Verfügung).
 
-Документация Microsoft:
+Microsoft-Dokumentation:
 - https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setmenuitembitmaps
 - https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-menuiteminfoa
 - https://learn.microsoft.com/en-us/windows/win32/menurc/using-menus
